@@ -16,7 +16,7 @@ public class Product implements Serializable{
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
+	private Long id;
 	private String name;
 	private Double price;
 	private String description;
@@ -24,7 +24,7 @@ public class Product implements Serializable{
 	
 	public Product () {}
 
-	public Product(long id, String name, Double price, String description, String imageUri) {
+	public Product(Long id, String name, Double price, String description, String imageUri) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -33,11 +33,11 @@ public class Product implements Serializable{
 		this.imageUri = imageUri;
 	}
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
