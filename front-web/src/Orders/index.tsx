@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
-import { isTemplateTail } from 'typescript';
+import { toast, ToastContainer} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import Footer from '../Footer';
-import { fetchProducts } from './api';
+import { fetchProducts, saveOrder } from './api';
 import { checkIsSelected } from './helpers';
 import OrderLocation from './OrderLocation';
 import OrderSummary from './OrderSummary';
@@ -22,7 +23,9 @@ function Orders(){
     useEffect(() =>{
         fetchProducts()
         .then(response => setProducts(response.data))
-        .catch(error => console.log(error));
+        .catch(() => {
+            toast.warning('Erro aolistar produtos');
+        })
     }, []);
 
     const handleSelectProduct = (product: Product) => {
@@ -35,22 +38,22 @@ function Orders(){
           setSelectedProducts(previous => [...previous, product]);
         }
       }
-      
-      /*const handleSubmit = () => {
+
+      const handleSubmit = () => {
         const productsIds = selectedProducts.map(({ id }) => ({ id }));
         const payload = {
           ...orderLocation!,
           products: productsIds
         }
       
-        saveOrder(payload).then(() => {
-          toast.error('Pedido enviado com sucesso!');
+        saveOrder(payload).then((response) => {
+          toast.error(`Pedido enviado com sucesso! Nº ${response.data.id}`);
           setSelectedProducts([]);
         })
           .catch(() => {
             toast.warning('Erro ao enviar pedido');
           })
-      }*/
+      }
 
     return (
        <>
@@ -64,7 +67,10 @@ function Orders(){
             <OrderLocation onChangeLocation={location => setOrderLocation(location)}/>
             <OrderSummary 
             amount={selectedProducts.length} 
-            totalPrice={totalPrice}/>
+            totalPrice={totalPrice}
+            onSubmit={handleSubmit}
+            
+            />
             
         </div>
         <Footer />
